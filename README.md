@@ -2,9 +2,11 @@
 
 A small installable web app (PWA) for Frescopa. It has no content of its own: everything comes from the Frescopa site on [AEM Edge Delivery Services](https://www.aem.live/), authored once in Document Authoring.
 
-- App: https://kunwarsaluja.github.io/frescopa-app/app/ (open on a phone, then Add to Home Screen)
-- Demo page (app in a phone frame, plus the content requests it makes): https://kunwarsaluja.github.io/frescopa-app/
-- Site: https://main--frescopa--kunwarsaluja.aem.live/en/us/ ([repo](https://github.com/kunwarsaluja/frescopa))
+- App: https://scdemos.github.io/frescopa-app/app/ (open on a phone, then Add to Home Screen)
+- Demo page (app in a phone frame, plus the content requests it makes): https://scdemos.github.io/frescopa-app/
+- Site: the Frescopa site in [scdemos/demo](https://github.com/scdemos/demo)
+
+Until Frescopa cuts over, its content is authored under `/drafts/frescopa` and its code is on the site's `frescopa` branch, so the app reads `https://frescopa--demo--scdemos.aem.page/drafts/frescopa/en/us/…` and always uses previewed content (draft pages aren't published). At cutover, set `CONTENT_ROOT` to `''` and `BRANCH` to `'main'` in `app/eds.js`; the app then reads published content from `main--demo--scdemos.aem.live/en/us/…`, and `?preview` switches it to previewed content. Paths below are relative to that content root.
 
 ## Two ways the app reuses site content
 
@@ -28,12 +30,12 @@ Links inside embedded content are handled by the app: fragments open in the bott
 
 ## Authoring the app
 
-Authors run the app from one document in DA: [`/en/us/app/experience`](https://da.live/form#/kunwarsaluja/frescopa/en/us/app/experience). It's [structured content](https://www.aem.live/docs/ew/administering/structured-content) with the schema `frescopa-app`, and the app reads it as JSON:
+Authors run the app from one document in DA: [`/en/us/app/experience`](https://da.live/form#/scdemos/demo/drafts/frescopa/en/us/app/experience). It's [structured content](https://www.aem.live/docs/ew/administering/structured-content) with the schema `frescopa-app`, and the app reads it as JSON:
 
-- live: `https://da-sc.adobeaem.workers.dev/live/kunwarsaluja/frescopa/en/us/app/experience`
-- preview: the same URL with `preview`, used when the app is opened with `?preview`
+- live: `https://da-sc.adobeaem.workers.dev/live/scdemos/demo/drafts/frescopa/en/us/app/experience`
+- preview: the same URL with `preview`, used in preview mode
 
-Edit it in **Frescopa Studio**, a DA app in the site repo: `https://da.live/app/kunwarsaluja/frescopa/tools/frescopa-studio/frescopa-studio#/en/us/app/experience`. Studio shows the form next to the app on a phone, which updates as you type; it finds the app through the `previews` sheet of the DA site config (`…/app/?{tier}`). Changes save to DA as you type. Preview updates the app's preview mode; Publish updates the live app on its next start. DA's own form editor opens the same document.
+Edit it in DA's form editor (link above): save, then preview (and, after cutover, publish) to update the app. **Frescopa Studio**, the DA app that shows the form next to the app on a phone and updates it as you type, isn't on the scdemos site yet. Once it's added to `scdemos/demo` (`tools/frescopa-studio`), the app accepts its drafts from `https://*--demo--scdemos.preview.da.live` for the `scdemos`/`demo` document only.
 
 | Field | Controls |
 |---|---|
@@ -68,7 +70,9 @@ npm run lint
 npm start            # http://localhost:4321
 ```
 
+On `localhost` the app reads site code and content from `aem up` on localhost:3000, so run `aem up` in the site repo first (open the app on `127.0.0.1:4321` to use the real site instead).
+
 ## Site requirements
 
 - `access-control-allow-origin: *` on the site (headers config, path `/**`), so the app can read content and load `aem-embed` and block code.
-- Site styles declare design tokens on `:root, :host`, and the booking block supports embedding ([frescopa#7](https://github.com/kunwarsaluja/frescopa/pull/7)).
+- Site styles declare design tokens on `:root, :host`, and the booking block supports embedding (both in `scdemos/demo`).
