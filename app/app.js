@@ -1,5 +1,5 @@
 import {
-  EXPERIENCE, LOCAL, LOCALE, PREVIEW, SITE, getExperience, loadEmbed,
+  EXPERIENCE, LOCAL, LOCALE, ORG, SITE, SITE_NAME, STUDIO_PREVIEW, getExperience, loadEmbed,
 } from './eds.js';
 import { el, icon } from './ui.js';
 import { closeSheet, openSheet } from './sheet.js';
@@ -24,7 +24,7 @@ const SCREENS = {
 
 // Frescopa Studio is a DA app: DA serves it from its preview host for the site's
 // branch (and from `aem up` on localhost:3000 with ?ref=local while developing it).
-const STUDIO_ORIGIN = /^https:\/\/[a-z0-9-]+--frescopa--kunwarsaluja\.preview\.da\.live$/;
+const STUDIO_ORIGIN = /^https:\/\/[a-z0-9-]+--demo--scdemos\.preview\.da\.live$/;
 const fromStudio = (event) => event.source === window.parent && window.parent !== window
   && (STUDIO_ORIGIN.test(event.origin) || (LOCAL && event.origin === 'http://localhost:3000'));
 
@@ -149,13 +149,16 @@ function start() {
 
 /**
  * In preview, Frescopa Studio sends the author's unsaved changes so the app updates as
- * they type: { type: 'structured-content', path, data } for the document it edits.
+ * they type: { type: 'structured-content', org, site, path, data } for the document it edits.
  * Studio's draft also starts the app when the document isn't previewed yet.
  */
 function listenToStudio() {
   window.addEventListener('message', (event) => {
-    const { type, path, data } = event.data ?? {};
-    if (!fromStudio(event) || type !== 'structured-content' || path !== `${LOCALE}/app/experience`) return;
+    const {
+      type, org, site, path, data,
+    } = event.data ?? {};
+    if (!fromStudio(event) || type !== 'structured-content') return;
+    if (org !== ORG || site !== SITE_NAME || path !== `${LOCALE}/app/experience`) return;
     // a draft without tabs is mid-edit (the schema requires them): keep showing the last one
     if (!data?.tabs?.length) return;
     const first = !experience;
@@ -202,7 +205,7 @@ function reportRequests() {
 
 reportRequests();
 loadEmbed();
-if (PREVIEW) listenToStudio();
+if (STUDIO_PREVIEW) listenToStudio();
 try {
   const saved = await getExperience();
   // in preview, Studio's draft may have arrived first: it's newer, so keep it

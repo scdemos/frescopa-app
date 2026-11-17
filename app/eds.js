@@ -1,16 +1,27 @@
 // Everything the app reads comes from the Frescopa site on AEM Edge Delivery Services.
-// It shows published content. With ?preview it shows previewed content instead:
-// that's how Frescopa Studio shows authors their changes before they publish.
-const ORG = 'kunwarsaluja';
-const SITE_NAME = 'frescopa';
-export const PREVIEW = new URLSearchParams(window.location.search).has('preview');
+// It shows published content (previewed content until cutover, see CONTENT_ROOT).
+// With ?preview it shows previewed content: that's how Frescopa Studio shows authors
+// their changes before they publish.
+export const ORG = 'scdemos';
+export const SITE_NAME = 'demo';
+// Until Frescopa cuts over, its content is authored under /drafts/frescopa and its
+// code lives on the site's frescopa branch. At cutover set CONTENT_ROOT to '' and
+// BRANCH to 'main'.
+const CONTENT_ROOT = '/drafts/frescopa';
+const BRANCH = 'frescopa';
+// ?preview: Frescopa Studio opened the app, so it reads previewed content and takes
+// the author's drafts from Studio.
+export const STUDIO_PREVIEW = new URLSearchParams(window.location.search).has('preview');
+// Draft pages aren't published, so while the content lives under /drafts the app
+// always reads previewed content.
+export const PREVIEW = CONTENT_ROOT.startsWith('/drafts/') || STUDIO_PREVIEW;
 // While developing (app on localhost), site code and content come from `aem up` on
 // localhost:3000, so site changes can be tried with the app before they're pushed.
 export const LOCAL = window.location.hostname === 'localhost';
 export const SITE = LOCAL
   ? 'http://localhost:3000'
-  : `https://main--${SITE_NAME}--${ORG}.aem.${PREVIEW ? 'page' : 'live'}`;
-export const LOCALE = '/en/us';
+  : `https://${BRANCH}--${SITE_NAME}--${ORG}.aem.${PREVIEW ? 'page' : 'live'}`;
+export const LOCALE = `${CONTENT_ROOT}/en/us`;
 
 // The app document: tabs, quick actions, featured campaign, screen text and labels.
 // Authored as structured content in DA and delivered as JSON.
