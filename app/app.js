@@ -1,5 +1,6 @@
 import {
-  EXPERIENCE, LOCAL, LOCALE, ORG, SITE, SITE_NAME, STUDIO_PREVIEW, getExperience, loadEmbed,
+  EXPERIENCE, LOCAL, LOCALE, ORG, SITE, SITE_NAME, STUDIO_PREVIEW, getExperience, isFragmentPath,
+  loadEmbed,
 } from './eds.js';
 import { el, icon } from './ui.js';
 import { closeSheet, openSheet } from './sheet.js';
@@ -101,7 +102,7 @@ function open(link, name = '', { fromTab = false } = {}) {
   }
   const path = url.pathname;
   const sheet = experience.sheets?.find((s) => s.page === path)?.fragment
-    ?? (path.startsWith(`${LOCALE}/fragments/`) ? path : null);
+    ?? (isFragmentPath(path) ? path : null);
   if (sheet) {
     openSheet(sheet, url.search.slice(1), { name, closeLabel: label('close') });
     return;
