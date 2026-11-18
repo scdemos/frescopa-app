@@ -6,7 +6,7 @@ A small installable web app (PWA) for Frescopa. It has no content of its own: ev
 - Demo page (app in a phone frame, plus the content requests it makes): https://scdemos.github.io/frescopa-app/
 - Site: the Frescopa site in [scdemos/demo](https://github.com/scdemos/demo)
 
-Until Frescopa cuts over, its content is authored under `/drafts/frescopa` and its code is on the site's `frescopa` branch, so the app reads `https://frescopa--demo--scdemos.aem.page/drafts/frescopa/en/us/…` and always uses previewed content (draft pages aren't published). At cutover, set `CONTENT_ROOT` to `''` and `BRANCH` to `'main'` in `app/eds.js`; the app then reads published content from `main--demo--scdemos.aem.live/en/us/…`, and `?preview` switches it to previewed content. Paths below are relative to that content root.
+The app reads published content from `https://main--demo--scdemos.aem.live/en/us/…`. With `?preview` (how Frescopa Studio opens it) it reads previewed content instead. `CONTENT_ROOT` and `BRANCH` in `app/eds.js` say where the content and site code live, if that ever moves (e.g. `/drafts/<name>` on a branch).
 
 ## Two ways the app reuses site content
 
@@ -30,12 +30,12 @@ Links inside embedded content are handled by the app: fragments open in the bott
 
 ## Authoring the app
 
-Authors run the app from one document in DA: [`/en/us/app/experience`](https://da.live/form#/scdemos/demo/drafts/frescopa/en/us/app/experience). It's [structured content](https://www.aem.live/docs/ew/administering/structured-content) with the schema `frescopa-app`, and the app reads it as JSON:
+Authors run the app from one document in DA: [`/en/us/app/experience`](https://da.live/form#/scdemos/demo/en/us/app/experience). It's [structured content](https://www.aem.live/docs/ew/administering/structured-content) with the schema `frescopa-app`, and the app reads it as JSON:
 
-- live: `https://da-sc.adobeaem.workers.dev/live/scdemos/demo/drafts/frescopa/en/us/app/experience`
+- live: `https://da-sc.adobeaem.workers.dev/live/scdemos/demo/en/us/app/experience`
 - preview: the same URL with `preview`, used in preview mode
 
-Edit it in DA's form editor (link above): save, then preview (and, after cutover, publish) to update the app. **Frescopa Studio**, the DA app that shows the form next to the app on a phone and updates it as you type, isn't on the scdemos site yet. Once it's added to `scdemos/demo` (`tools/frescopa-studio`), the app accepts its drafts from `https://*--demo--scdemos.preview.da.live` for the `scdemos`/`demo` document only.
+Edit it in **Frescopa Studio**, a DA app in the site repo: [`/tools/frescopa-studio`](https://da.live/app/scdemos/demo/tools/frescopa-studio/frescopa-studio#/scdemos/demo/en/us/app/experience). Studio shows the form next to the app on a phone, and the app updates as you type: it accepts drafts from `https://*--demo--scdemos.preview.da.live` for the `scdemos`/`demo` document only. Preview updates what `?preview` shows; Publish updates the live app on its next start. Studio finds the app through the `channels` sheet of the site's DA config. DA's own form editor (link above) opens the same document.
 
 | Field | Controls |
 |---|---|

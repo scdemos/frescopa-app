@@ -1,14 +1,13 @@
 // Everything the app reads comes from the Frescopa site on AEM Edge Delivery Services.
-// It shows published content (previewed content until cutover, see CONTENT_ROOT).
+// It shows published content (previewed content while CONTENT_ROOT is under /drafts).
 // With ?preview it shows previewed content: that's how Frescopa Studio shows authors
 // their changes before they publish.
 export const ORG = 'scdemos';
 export const SITE_NAME = 'demo';
-// Until Frescopa cuts over, its content is authored under /drafts/frescopa and its
-// code lives on the site's frescopa branch. At cutover set CONTENT_ROOT to '' and
-// BRANCH to 'main'.
-const CONTENT_ROOT = '/drafts/frescopa';
-const BRANCH = 'frescopa';
+// Where the Frescopa content lives in the site (a folder such as /drafts/frescopa while
+// it's authored there), and the site branch that serves its code.
+const CONTENT_ROOT = '';
+const BRANCH = 'main';
 // ?preview: Frescopa Studio opened the app, so it reads previewed content and takes
 // the author's drafts from Studio.
 export const STUDIO_PREVIEW = new URLSearchParams(window.location.search).has('preview');
