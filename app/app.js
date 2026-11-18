@@ -1,6 +1,6 @@
 import {
-  EXPERIENCE, LOCAL, LOCALE, ORG, SITE, SITE_NAME, STUDIO_PREVIEW, getExperience, isFragmentPath,
-  loadEmbed,
+  DOCUMENT, EXPERIENCE, LOCAL, LOCALE, ORG, SITE, SITE_NAME, STUDIO_PREVIEW, getExperience,
+  isFragmentPath, loadEmbed,
 } from './eds.js';
 import { el, icon } from './ui.js';
 import { closeSheet, openSheet } from './sheet.js';
@@ -159,7 +159,7 @@ function listenToStudio() {
       type, org, site, path, data,
     } = event.data ?? {};
     if (!fromStudio(event) || type !== 'structured-content') return;
-    if (org !== ORG || site !== SITE_NAME || path !== `${LOCALE}/app/experience`) return;
+    if (org !== ORG || site !== SITE_NAME || path !== DOCUMENT) return;
     // a draft without tabs is mid-edit (the schema requires them): keep showing the last one
     if (!data?.tabs?.length) return;
     const first = !experience;
@@ -190,7 +190,7 @@ function reportRequests() {
   new PerformanceObserver((list) => {
     list.getEntries()
       .map((e) => {
-        if (e.name.startsWith(EXPERIENCE)) return { e, path: `${LOCALE}/app/experience (app document)` };
+        if (e.name.startsWith(EXPERIENCE)) return { e, path: `${DOCUMENT} (app document)` };
         if (e.name.startsWith(SITE) && /\.(json|plain\.html)(\?|$)/.test(e.name)) return { e, path: e.name.slice(SITE.length) };
         return null;
       })
