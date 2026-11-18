@@ -35,6 +35,8 @@ Authors run the app from one document in DA: [`/en/app/experience`](https://da.l
 - live: `https://da-sc.adobeaem.workers.dev/live/scdemos/demo/en/app/experience`
 - preview: the same URL with `preview`, used in preview mode
 
+**Other app documents:** `?doc=` names a different app document in an `/app` folder of the site, e.g. `?doc=/en/app/experience-next` for a next release. Studio passes it through the `{path}` token of a channel URL (`…/app/?{tier}&doc={path}`), so a release can be built and shown in Studio while it's only saved in DA, never previewed or published.
+
 Edit it in **Frescopa Studio**, a DA app in the site repo: [`/tools/frescopa-studio`](https://da.live/app/scdemos/demo/tools/frescopa-studio/frescopa-studio#/scdemos/demo/en/app/experience). Studio shows the form next to the app on a phone, and the app updates as you type: it accepts drafts from `https://*--demo--scdemos.preview.da.live` for the `scdemos`/`demo` document only. Preview updates what `?preview` shows; Publish updates the live app on its next start. Studio finds the app through the `channels` sheet of the site's DA config. DA's own form editor (link above) opens the same document.
 
 | Field | Controls |

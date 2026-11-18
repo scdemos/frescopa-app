@@ -31,7 +31,13 @@ export function isFragmentPath(path) {
 // The app document: tabs, quick actions, featured campaign, screen text and labels.
 // Authored as structured content in DA and delivered as JSON.
 // See https://www.aem.live/docs/ew/administering/structured-content
-export const EXPERIENCE = `https://da-sc.adobeaem.workers.dev/${PREVIEW ? 'preview' : 'live'}/${ORG}/${SITE_NAME}${LOCALE}/app/experience`;
+// Which app document to show: ?doc= names one in an /app folder of the site (Frescopa
+// Studio passes the document it edits, e.g. /en/app/experience-next for a next release).
+const DOC_PARAM = new URLSearchParams(window.location.search).get('doc') || '';
+export const DOCUMENT = /^(\/[a-z0-9][a-z0-9-]*)*\/app\/[a-z0-9][a-z0-9-]*$/.test(DOC_PARAM)
+  ? DOC_PARAM
+  : `${LOCALE}/app/experience`;
+export const EXPERIENCE = `https://da-sc.adobeaem.workers.dev/${PREVIEW ? 'preview' : 'live'}/${ORG}/${SITE_NAME}${DOCUMENT}`;
 
 /**
  * Absolute URL on the site for a site path. Anything that resolves to another host
