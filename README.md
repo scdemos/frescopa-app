@@ -6,7 +6,7 @@ A small installable web app (PWA) for Frescopa. It has no content of its own: ev
 - Demo page (app in a phone frame, plus the content requests it makes): https://scdemos.github.io/frescopa-app/
 - Site: the Frescopa site in [scdemos/demo](https://github.com/scdemos/demo)
 
-The app reads published content from `https://main--demo--scdemos.aem.live/en/us/…`. With `?preview` (how Frescopa Studio opens it) it reads previewed content instead. `CONTENT_ROOT` and `BRANCH` in `app/eds.js` say where the content and site code live, if that ever moves (e.g. `/drafts/<name>` on a branch).
+The app reads published content from `https://main--demo--scdemos.aem.live/en/…`. With `?preview` (how Frescopa Studio opens it) it reads previewed content instead. `CONTENT_ROOT` and `BRANCH` in `app/eds.js` say where the content and site code live, if that ever moves (e.g. `/drafts/<name>` on a branch).
 
 ## Two ways the app reuses site content
 
@@ -14,9 +14,9 @@ The app reads published content from `https://main--demo--scdemos.aem.live/en/us
 
 | Screen | Source |
 |---|---|
-| Offers | `/en/us/data/offers.json` (ended offers hidden, featured first, then ending soonest) |
-| Shop | `/en/us/data/products.json` |
-| Houses | `/en/us/data/locations.json` |
+| Offers | `/en/data/offers.json` (ended offers hidden, featured first, then ending soonest) |
+| Shop | `/en/data/products.json` |
+| Houses | `/en/data/locations.json` |
 
 **Site experiences through [aem-embed](https://www.aem.live/docs/aem-embed).** Where the site already designs the experience, the app shows it with `<aem-embed>` and the site's own blocks render it.
 
@@ -30,20 +30,20 @@ Links inside embedded content are handled by the app: fragments open in the bott
 
 ## Authoring the app
 
-Authors run the app from one document in DA: [`/en/us/app/experience`](https://da.live/form#/scdemos/demo/en/us/app/experience). It's [structured content](https://www.aem.live/docs/ew/administering/structured-content) with the schema `frescopa-app`, and the app reads it as JSON:
+Authors run the app from one document in DA: [`/en/app/experience`](https://da.live/form#/scdemos/demo/en/app/experience). It's [structured content](https://www.aem.live/docs/ew/administering/structured-content) with the schema `frescopa-app`, and the app reads it as JSON:
 
-- live: `https://da-sc.adobeaem.workers.dev/live/scdemos/demo/en/us/app/experience`
+- live: `https://da-sc.adobeaem.workers.dev/live/scdemos/demo/en/app/experience`
 - preview: the same URL with `preview`, used in preview mode
 
-Edit it in **Frescopa Studio**, a DA app in the site repo: [`/tools/frescopa-studio`](https://da.live/app/scdemos/demo/tools/frescopa-studio/frescopa-studio#/scdemos/demo/en/us/app/experience). Studio shows the form next to the app on a phone, and the app updates as you type: it accepts drafts from `https://*--demo--scdemos.preview.da.live` for the `scdemos`/`demo` document only. Preview updates what `?preview` shows; Publish updates the live app on its next start. Studio finds the app through the `channels` sheet of the site's DA config. DA's own form editor (link above) opens the same document.
+Edit it in **Frescopa Studio**, a DA app in the site repo: [`/tools/frescopa-studio`](https://da.live/app/scdemos/demo/tools/frescopa-studio/frescopa-studio#/scdemos/demo/en/app/experience). Studio shows the form next to the app on a phone, and the app updates as you type: it accepts drafts from `https://*--demo--scdemos.preview.da.live` for the `scdemos`/`demo` document only. Preview updates what `?preview` shows; Publish updates the live app on its next start. Studio finds the app through the `channels` sheet of the site's DA config. DA's own form editor (link above) opens the same document.
 
 | Field | Controls |
 |---|---|
-| Announcement | Path of an announcement fragment shown at the top of Home, e.g. `/en/us/fragments/announcements/member-week` (a `campaign` block works well). Empty hides it |
+| Announcement | Path of an announcement fragment shown at the top of Home, e.g. `/fragments/announcements/member-week` (a `campaign` block works well). Empty hides it |
 | Featured campaign | Path of the campaign fragment shown on Home |
 | Quick actions, Bottom tabs | Label, icon and what it opens: an app screen (`home`, `offers`, `shop`, `houses`) or a site page path |
 | Offers, Shop, Houses screen | Title and subtitle (`{n}` is the number of items) |
-| Open in a bottom sheet | Links to a page that open a fragment over the app instead, e.g. `/en/us/booking` → `/en/us/fragments/booking-experience` |
+| Open in a bottom sheet | Links to a page that open a fragment over the app instead, e.g. `/en/booking` → `/fragments/booking-experience` |
 | App text | Greetings, labels and messages |
 
 Icons: `home`, `tag`, `bag`, `person`, `pin`, `calendar`, `clock`, `chat`. A new kind of screen (a new layout) or icon is the only change that needs code.

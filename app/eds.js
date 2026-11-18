@@ -20,7 +20,13 @@ export const LOCAL = window.location.hostname === 'localhost';
 export const SITE = LOCAL
   ? 'http://localhost:3000'
   : `https://${BRANCH}--${SITE_NAME}--${ORG}.aem.${PREVIEW ? 'page' : 'live'}`;
-export const LOCALE = `${CONTENT_ROOT}/en/us`;
+// The site's content is organised by language: /en, /de, …
+export const LOCALE = `${CONTENT_ROOT}/en`;
+
+/** Fragments live in the shared /fragments folder or in a language folder's own. */
+export function isFragmentPath(path) {
+  return [`${CONTENT_ROOT}/fragments/`, `${LOCALE}/fragments/`].some((root) => path.startsWith(root));
+}
 
 // The app document: tabs, quick actions, featured campaign, screen text and labels.
 // Authored as structured content in DA and delivered as JSON.
@@ -75,7 +81,7 @@ export function loadEmbed() {
 
 /**
  * An <aem-embed> for a site page or fragment, rendered by the site's own code.
- * @param {string} path site path, e.g. /en/us/fragments/booking-experience
+ * @param {string} path site path, e.g. /fragments/booking-experience
  * @param {string} [query] prefill values for blocks that read them (booking)
  */
 export function embed(path, query = '') {
