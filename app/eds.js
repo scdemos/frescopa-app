@@ -50,6 +50,20 @@ export function siteUrl(path) {
   return url.href;
 }
 
+// Edge Commerce serves the site's products (their pages, index and images) from aem.network. Its
+// product index has no CORS, so the app reads it through the site's CloneIt worker, which adds it.
+const NETWORK = `https://${BRANCH}--${SITE_NAME}--${ORG}.aem.network`;
+// product images Edge Commerce hasn't copied yet still point at the site's published media
+const LIVE = `https://${BRANCH}--${SITE_NAME}--${ORG}.aem.live`;
+const PRODUCT_INDEX = `https://demo.bbird.live/cloneit/products/${ORG}/${SITE_NAME}`;
+
+/** Absolute URL of an image from the site, or from its products (aem.network, or its published media). */
+export function mediaUrl(path) {
+  const url = new URL(path, SITE);
+  if (![SITE, NETWORK, LIVE].includes(url.origin)) throw new Error(`not a site image: ${path}`);
+  return url.href;
+}
+
 export async function getJSON(path) {
   const resp = await fetch(siteUrl(path));
   if (!resp.ok) throw new Error(`${path}: ${resp.status}`);
@@ -59,6 +73,22 @@ export async function getJSON(path) {
 /** Rows of a single sheet, or of a query index. */
 export async function getSheet(path) {
   return (await getJSON(path)).data;
+}
+
+/**
+ * The site's products, in the order of its products sheet, from Edge Commerce's product index (published
+ * products). Rows have the sheet's columns; url is the product page and image an absolute URL.
+ */
+export async function getProducts(index) {
+  const resp = await fetch(`${PRODUCT_INDEX}${index}`);
+  if (!resp.ok) throw new Error(`${index}: ${resp.status}`);
+  return ((await resp.json()).data ?? [])
+    .map((row) => ({
+      ...row,
+      url: row.path,
+      image: row.image ? new URL(row.image, `${NETWORK}${row.path.replace(/[^/]*$/, '')}`).href : '',
+    }))
+    .sort((a, b) => (Number(a.position) || 0) - (Number(b.position) || 0));
 }
 
 /** The app document's data. */
