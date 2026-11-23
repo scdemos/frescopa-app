@@ -15,7 +15,7 @@ The app reads published content from `https://main--demo--scdemos.aem.live/en/â€
 | Screen | Source |
 |---|---|
 | Offers | `/en/data/offers.json` (ended offers hidden, featured first, then ending soonest) |
-| Shop | `/en/data/products.json` |
+| Shop | Edge Commerce product index, `/en/products/index.json` (products are managed in Edge Commerce) |
 | Houses | `/en/data/locations.json` |
 
 **Site experiences through [aem-embed](https://www.aem.live/docs/aem-embed).** Where the site already designs the experience, the app shows it with `<aem-embed>` and the site's own blocks render it.
