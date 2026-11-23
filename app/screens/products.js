@@ -3,7 +3,7 @@ import { el, format } from '../ui.js';
 import card from './card.js';
 
 export default async function products(screen) {
-  const rows = await getProducts(screen.source, screen.sheet);
+  const rows = await getProducts(screen.source);
   return el('div.screen', {},
     el('h1', {}, screen.title),
     el('p.screen-subtitle', {}, format(screen.subtitle, { n: rows.length })),

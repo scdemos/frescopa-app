@@ -2,9 +2,19 @@ import { mediaUrl } from '../eds.js';
 import { el } from '../ui.js';
 
 /** A tappable offer or product card. */
+/** The card's image, when it comes from the site or its products; any other image is left out. */
+function image(path) {
+  try {
+    return path ? mediaUrl(path) : '';
+  } catch {
+    return '';
+  }
+}
+
 export default function card(item, { highlight = false, details = [] } = {}) {
+  const src = image(item.image);
   return el(`button.card${highlight ? '.highlight' : ''}`, { type: 'button', 'data-link': item.url },
-    item.image && el('img', { src: mediaUrl(item.image), alt: '', loading: 'lazy' }),
+    src && el('img', { src, alt: '', loading: 'lazy' }),
     el('span.card-meta', {},
       item.badge && el('span.badge', {}, item.badge),
       el('span.card-for', {}, item.audience ?? item.category)),

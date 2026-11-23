@@ -76,30 +76,19 @@ export async function getSheet(path) {
 }
 
 /**
- * The site's products, in the order of its products sheet: from Edge Commerce's product index, or from
- * the products sheet when the site has no Edge Commerce index, or when the app shows previewed or local
- * content. Rows have the sheet's columns; url is
- * the product page and image an absolute URL.
+ * The site's products, in the order of its products sheet, from Edge Commerce's product index (published
+ * products). Rows have the sheet's columns; url is the product page and image an absolute URL.
  */
-export async function getProducts(index, sheet) {
-  // previewed and local content (author changes, `aem up`) is in the sheet; the index has only published products
-  if (PREVIEW || LOCAL) return getSheet(sheet);
-  try {
-    const resp = await fetch(`${PRODUCT_INDEX}${index}`);
-    const rows = resp.ok ? (await resp.json()).data ?? [] : [];
-    if (rows.length) {
-      return rows
-        .map((row) => ({
-          ...row,
-          url: row.path,
-          image: row.image ? new URL(row.image, `${NETWORK}${row.path.replace(/[^/]*$/, '')}`).href : '',
-        }))
-        .sort((a, b) => (Number(a.position) || 0) - (Number(b.position) || 0));
-    }
-  } catch {
-    // no index: the sheet below
-  }
-  return getSheet(sheet);
+export async function getProducts(index) {
+  const resp = await fetch(`${PRODUCT_INDEX}${index}`);
+  if (!resp.ok) throw new Error(`${index}: ${resp.status}`);
+  return ((await resp.json()).data ?? [])
+    .map((row) => ({
+      ...row,
+      url: row.path,
+      image: row.image ? new URL(row.image, `${NETWORK}${row.path.replace(/[^/]*$/, '')}`).href : '',
+    }))
+    .sort((a, b) => (Number(a.position) || 0) - (Number(b.position) || 0));
 }
 
 /** The app document's data. */

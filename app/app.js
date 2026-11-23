@@ -15,7 +15,7 @@ import page from './screens/page.js';
 const SCREENS = {
   home: { layout: home },
   offers: { layout: offers, source: `${LOCALE}/data/offers.json` },
-  shop: { layout: products, source: `${LOCALE}/products/index.json`, sheet: `${LOCALE}/data/products.json` },
+  shop: { layout: products, source: `${LOCALE}/products/index.json` },
   houses: {
     layout: locations,
     source: `${LOCALE}/data/locations.json`,
