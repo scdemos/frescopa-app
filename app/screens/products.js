@@ -1,9 +1,9 @@
-import { getSheet } from '../eds.js';
+import { getProducts } from '../eds.js';
 import { el, format } from '../ui.js';
 import card from './card.js';
 
 export default async function products(screen) {
-  const rows = await getSheet(screen.source);
+  const rows = await getProducts(screen.source, screen.sheet);
   return el('div.screen', {},
     el('h1', {}, screen.title),
     el('p.screen-subtitle', {}, format(screen.subtitle, { n: rows.length })),
